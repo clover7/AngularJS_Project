@@ -1,42 +1,155 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>영화내용 출력페이지</title>
-<style>
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    li {
-        float: left;
-        width:100px;
-        padding:20px;
-        margin:10px;
-        box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-    }
-    h3 {
-        margin: 0;
-        text-align: center;
-        font-size:13px;
-		overflow:hidden;
-		white-space:nowrap;
-		text-overflow:ellipsis;
-		width:100px;
-    }
-</style>
-</head>
-<body>
-	<h1>영화목록<em>?</em>개</h1>
-	<button id="deleteBtn">삭제</button>
-	<ul>
+    <meta charset="UTF-8">
+    <title>영화내용 출력페이지</title>
+    <style>
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
         
-	</ul>
- 
+        li {
+            float: left;
+            width: 100px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+        
+        h3 {
+            margin: 0;
+            text-align: center;
+            font-size: 13px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>영화목록 : <em>?</em>개</h1>
+    <button id="deleteBtn">삭제</button>
+    <ul>
+<!--
+        <li id="movieList">
+            <img src="poster/p1.png" width="100px;">
+            <h3> 곡성</h3>
+        </li>
+-->
+    </ul>
+    
+    
+    <!-- underscore.js 에 사용할 템플릿 선언 -->
+    <!-- 
+        unserscore gram
+        <% javascript %>
+        <% _.each(){}%>
+    -->
+    <script type="text/template" id="litmp">
+    <% _.each(movies,function(movie){ %>
+        <li>
+            <img src="poster/<%= movie.poster%>" width=100px;"/>
+            <h3><%= movie.name %></h3>
+        </li>
+    <% })%>
+    </script>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/underscore-min.js"></script>
+    
+    <script>
+        /* 
+                  $.ajax("json/movies.json",{
+                   success:function(json){ 
+                       var movie = json;
+                        alert(movie);  
+                   } 
+                });
+                 
+                jquery에서 반복하여 view가 갱신되는 방법
+                1)jquery에서 객체 생성후 dom에 추가 
+                2)underscore.js 템플릿 사용 : 
+                    - 배열, 객체활용 좋다.
+                    - 템플릿 활용 좋다. 
+                    - backbone.js의 기본 템플릿은 unserscore.js 
+                */
+
+        var movies = [{
+            "poster": "p1.png",
+            "director": "나홍진",
+            "name": "곡성",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p2.png",
+            "director": "클레이 케이티스",
+            "name": "앵그리버드 더무비",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p3.png",
+            "director": "창감독",
+            "name": "계춘할망",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p4.png",
+            "director": "조성희",
+            "name": "탐정 홍길동",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p5.png",
+            "director": "존 카니",
+            "name": "싱스트리트",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p6.png",
+            "director": "안소니 루소",
+            "name": "캡틴아메리카:시빌워",
+            "grade": 106,
+            "gradeNum": 12
+        }];
+
+        //1) 기본적인 방법.
+        //            $(movies).each(function(){
+        ////                alert(this.name);
+        //                var $li = $("<li>");
+        //                var $img = $("<img>").attr("src", "poster/" + this.poster).attr("width", "100px");
+        //                var $img = $("<img width=100px>").attr("src", "poster/" + this.poster).attr("width", "100px");
+        //                var $h3 = $("<h3>").text(this.name);
+        //                var $li = $("<li>");
+        //                
+        //                $li.append($img, $h3).appendTo("ul");
+        //            }); 
+        //        
+        //2) unserscore.js 템플릿 사용   
+        //        var tmp = _.template("<h1><%=name%></h1>"); 
+//        var markup = tmp({name:"하이"});
+//        alert(markup);  
+        var templateHTML = $("#litmp").html();
+        var tmp = _.template(templateHTML); 
+        var markup = tmp({"movies":movies}); 
+        $("ul").html(markup);
+         
+        var movieCount = movies.length;
+        $("em").text(movieCount);
+        
+        $("#deleteBtn").click(function() { 
+//            $("li").eq(0).remove();
+            $("li:last").remove();
+            $("em").text($("li").size());
+        });
+    </script>
+
+
 </body>
+
+
 </html>
-
-
-
-

@@ -7,7 +7,6 @@
     <style>
         body {
             font-family: 'Kakao', sans-serif;
-
         }
 
         h2, h3 {
@@ -21,6 +20,26 @@
     </style>
 </head>
 <body>
-
+    <h1>jQuery의 경우 </h1>
+    <input id="txt">
+    
+    <h2>?</h2>
+    <h3>?</h3>
+    
+    <!-- jquey import -->
+    <!-- html5부터는 script type 안써도됨! -->
+    <script src="js/jquery.js"></script>
+    <script>
+        //jquey $
+        //keyup : 누르고 뗄때 이벤트 동작함.
+        //1) id가 txt인 요소를 선택한 후, jquey 객체로 만들고. keyup이벤트를 감지하는 이벤트리스너를 붙인다.
+         
+        $("#txt").keyup(function(){  
+            //alert("test");
+            //2) user가 입력한 글자를 읽어온다. 
+            var text = $("#txt").val();
+            $("h2").append(text); 
+        });
+    </script>
 </body>
 </html>

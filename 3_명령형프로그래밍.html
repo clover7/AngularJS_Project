@@ -8,8 +8,19 @@
         img {
             width:300px;
             box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
+        } 
+        
+        #img2 {
+            display: none;
+        } 
+        
+        #toggleImg {
+            transition: .4s ease;
+            transform:perspective(500px) rotateY(0deg) scale(1);
         }
-
+        #toggleImg.mini {        
+            transform:perspective(500px) rotateY(720deg) scale(.5);
+        }
 
     </style>
 </head>
@@ -24,5 +35,31 @@
         <img src="poster/p2.png" width="300" id="img1"/>
         <img src="poster/p4.png" width="300" id="img2"/>
     </div>
+    <script src="js/jquery.js"></script>
+    <script> 
+        //1) #toggle에 change이벤트 리스너를 붙인다. 
+        $("#toggle").change(function(){ 
+            var flag = $("#toggle").prop("checked");  
+            if(flag){
+                $("#toggleImg").addClass("mini"); 
+                $("label").text("보이기");
+                //id img1 요쇼를 선택후 숨기기
+                $("#img1").hide();
+                $("#img2").show(); 
+            } 
+            else{ 
+                $("#toggleImg").removeClass("mini"); 
+                $("label").text("숨기기");
+                $("#img1").show();
+                $("#img2").hide();
+            }
+                
+            
+//            if($("#toggleImg").hasClass("mini"))
+//                $("#toggleImg").removeClass("mini");
+//            else
+//                $("#toggleImg").addClass("mini");
+        });
+    </script>
 </body>
 </html>
