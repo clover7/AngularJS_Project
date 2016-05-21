@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="filterApp"> 
+<head>
+    <meta charset="UTF-8">
+    <title>filter</title>
+</head>
+
+<body ng-controller="filterCtrl">
+    <!-- interpolation : {{}}-->
+    <!-- filter : | 로 사용 -->
+    
+   <h1>가격 : {{price|currency}}</h1>
+   <h1 ng-bind="price">가격 : {{currency}} </h1>
+    <hr/>
+    <script src="js/angular.min.js"></script>
+    <!-- 한국어 처리기 import-->
+    <script src="js/angular-locale_ko.js"></script>
+    <script>
+        var app = angular.module("filterApp",[]);
+        app.controller("filterCtrl",["$scope", function($scope){ 
+            $scope.price = 584230; 
+            
+        }]);
+    </script>
+</body>
+
+</html>

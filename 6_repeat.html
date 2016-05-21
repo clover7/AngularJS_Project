@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html> 
+<html ng-app="repeatApp">
 
 <head>
     <meta charset="UTF-8">
@@ -36,14 +36,76 @@
     </style>
 </head>
 
-<body>
-    <h1>영화목록<em></em>개</h1>
-    <button>삭제</button>
-    <ul>
-        
-        
+<body ng-controller="repeatCtrl">
+    <!-- view영역 : start -->
+    <!-- 하나의 movies객체를 가지고 한 스코프안에서 사용하기때문에, 객체만 핸들링하면 보여주는 뷰는 다 동시에 바뀐다. -->
+    <h1>영화목록 : <em>{{movies.length}}</em>개</h1> 
+    <button ng-click="removeMovie(movies)">삭제</button>
+    <ul> 
+        <li ng-repeat="movie in movies">
+            <img src="poster/{{movie.poster}}" width="100px;"/>
+            <h3>{{movie.name}}</h3>
+        </li>
     </ul>
-   
+    <!-- view영역 : end -->
 </body>
-
+    
+    <!-- angular import -->
+ <script src="js/angular.min.js"></script> 
+    <script>
+        var app = angular.module("repeatApp",[]); 
+        
+        //controller
+        app.controller("repeatCtrl",["$scope",function($scope){  
+           $scope.movies = [{
+            "poster": "p1.png",
+            "director": "나홍진",
+            "name": "곡성",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p2.png",
+            "director": "클레이 케이티스",
+            "name": "앵그리버드 더무비",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p3.png",
+            "director": "창감독",
+            "name": "계춘할망",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p4.png",
+            "director": "조성희",
+            "name": "탐정 홍길동",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p5.png",
+            "director": "존 카니",
+            "name": "싱스트리트",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p6.png",
+            "director": "안소니 루소",
+            "name": "캡틴아메리카:시빌워",
+            "grade": 106,
+            "gradeNum": 12
+        }];
+            
+    // 함수코드넣어야하는데 조심해야함.  
+    // 전역변수를 지.양.한다.
+    //항상 같은 scope 안에 해당하는 것만.!!  
+        $scope.removeMovie = function(movies){ 
+         //DI :  Dependency Injection : 의존성 주입
+         //Inversion of control : 제어역전
+         //필요한게 있으면 받아라. 필요한 것이 있으면 그 프레임워크로부터 받아서 써라.  Spring의 철학..  
+        movies.pop();    //javascript문법임.. pop, push
+//            $scope.movies.push();     //이런방법이 있음. 
+        }; 
+              
+        }]); 
+    </script>
 </html>

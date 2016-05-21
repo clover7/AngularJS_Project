@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<!-- 2) angular 작성하라는 선언 
+- ng-app 
+- html, body안에 써도 된다. 
+- 대소문자 구분때문에 카멜식을 사용. 
+-->
+<html ng-app="helloApp">
 <head>
 <meta charset="UTF-8">
 <title>Hello Angular.js</title>
@@ -18,14 +23,57 @@
 	}
 </style>
 </head>
+    <!-- single page application -->
+    <!-- 여러 사람이 module로 개발해야하는 경우에는 mvc적용하여 사용한다. 
+        http://stats.js.org/
+        - backbone.js인 경우에는 jquey에 의존적
+        - d3 :  visualization
+        - meteor : database 
+        - a1 : 현업에서 1버전 사용중 .zip으로 받아서 사용. min.js로는 제대로 사용할 수 없음.   
+            ==> 국가언어처리, 날짜&화폐 
+        - a2 : 당장쓰기는 어려움. 
+        
+    -->
+     
+<body> 
 <h1>Angular를 이용해봅시다.^-^</h1>
-<body>
- 	<div>
- 		<input type="text"/>
- 		<h2></h2>
-        <h3></h3>
+    <!-- 4) 컨트롤하고싶은게 있으면 ng-controller --> 
+ 	<div ng-controller="helloController">
+        <!-- 6) view : 유저가 입력하는 요소 
+            ng-model로 선언해둔 곳에 선언 
+            {{txt}} : 인터폴레이션, ng-bind="txt"와 같음.  
+        --> 
+ 		<input type="text" ng-model="txt"/>
+ 		<h2>{{txt}}</h2>
+        <h3 ng-bind="txt"></h3>
 	</div>
-   
+    
+      <!-- 1) angular.js : 내부적으로 jquey를 사용한다. 
+        만약, 같이 쓰려고 하면, jquery를 먼저 선언하고, angular를 사용-->
+   <script src="js/angular.min.js"></script>
+    <script>
+        // 3) module 사용한다 선언 
+        //"" : 사용하려는 해당 모듈명.
+        //[] : 외부모듈을 불러올 때 사용 ng-app 이름 
+        var app = angular.module("helloApp",[]);
+        
+        //angular는 single page application (SPA) 개발에 활용한다.
+        //SPA개발 : MVC패턴
+        //Model : 데이터 자체. 
+        //View : 뷰
+        //Controller : m, v를 연결시켜주는 역할을 함. 
+        //뷰따로만들고, 서버 개발자가 마이크로서버 만들고, 클라이언트 개발자가 컨트롤러를 만든다. 
+        //왜 하이브리드앱은 ? 앱은 단일 페이지로 사용되기 때문에 spa사용. 
+        
+        //5) 컨트롤러 설정
+        //[] : 앞에 개수는 유동적이지만, 제일 마지막에 function들어감.
+        // $scope 를 항상 넣어줘야한다. 
+        app.controller("helloController",["$scope",function($scope){
+            alert("test");
+            $scope.txt="hi";
+        }]);
+    </script>
+  
  </body>
  </html>
  
