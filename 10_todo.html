@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="todoApp">
 <head>
     <meta charset="UTF-8">
     <title>할일관리프로그램</title>
@@ -45,19 +45,16 @@
         li.end {
             color:deepskyblue;
         }
-        
-        
-        
     </style>
 </head>
-<body >
+<body ng-controller="todoController">
 <div id="wrap">
 <h1>님의 할일목록</h1>
 <p>
-    전체할일 : <em></em>개 
+    전체할일 : <em>{{totalCount}}</em>개
     / 
-    미완료 : <span></span>개
-    <button >완료된 할일제거</button>
+    미완료 : <span>{{todoCount}}</span>개
+    <button ng-click="checkTodo()">완료된 할일제거</button>
 </p>
 <form>
 <fieldset>
@@ -67,14 +64,32 @@
     <button>입력</button>
 </fieldset>
 </form>
+
 <h2>할일목록</h2>
 <ul>
-
+    <switcher ng-model="labels" true-label="Done" false-label="Todo"> </switcher> <label>오늘</label>
 </ul>
 </div>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-switcher.js"></script>
+    <script>
+        var app = angular.module("todoApp", ['switcher']);
+        app.controller("todoController", ["$scope", function($scope){
 
+            $scope.totalCount = 10;
+            $scope.todoCount = 1;
+
+            $scope.checkTodo = function(){
+                alert("checkTodo");
+            }
+//
+        }]);
+    </script>
 </body>
 </html>
+
+<!-- j.mp/0521anis
+blazebottle@naver.com -->
 
 
 
