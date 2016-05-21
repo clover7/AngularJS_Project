@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html ng-app="filterApp"> 
+<html ng-app="filterApp">
+
 <head>
     <meta charset="UTF-8">
     <title>filter</title>
@@ -7,18 +8,73 @@
 
 <body ng-controller="filterCtrl">
     <!-- interpolation : {{}}-->
-    <!-- filter : | 로 사용 -->
-    
-   <h1>가격 : {{price|currency}}</h1>
-   <h1 ng-bind="price">가격 : {{currency}} </h1>
+    <!-- filter : | 로 사용
+         filter option : ":"로 사용 -->
+
+    <h1>가격 : {{price|currency:undefined:0}}</h1>
+    <h1>가격 : {{price|currency:undefined:1}}</h1>
+    <h1 ng-bind="price">가격 : {{currency}} </h1>
+    <hr/>
+    <h1>날짜 : {{day}}</h1>
+    <h1>날짜 : {{day|date:"yyyyMMdd"}}</h1>
+    <h1>날짜 : {{day|date:"MMM, dd yyyy"}}</h1>
+    <hr/>
+    <h1>영화검색</h1>
+    <input type="text" id="search" ng-model="movieName"/>
+
+    <ul>
+        <li ng-repeat="list in lists|filter:movieName"> 
+            <!-- 한글은 한글자 후에 나온다. 영어는 바로 검색 가능 -->
+            이름 :  {{list.name}} / 감독 : {{list.director}} 
+        </li>
+    </ul>
     <hr/>
     <script src="js/angular.min.js"></script>
-    <!-- 한국어 처리기 import-->
-    <script src="js/angular-locale_ko.js"></script>
+    <!-- 한국어 처리기 import
+    <script src="js/angular-locale_ko.js"></script>-->
     <script>
-        var app = angular.module("filterApp",[]);
-        app.controller("filterCtrl",["$scope", function($scope){ 
-            $scope.price = 584230; 
+        var app = angular.module("filterApp", []);
+        app.controller("filterCtrl", ["$scope", function($scope) {
+            $scope.price = 584230;
+            $scope.day = new Date();
+            
+            $scope.lists = [{
+            "poster": "p1.png",
+            "director": "나홍진",
+            "name": "곡성",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p2.png",
+            "director": "클레이 케이티스",
+            "name": "앵그리버드 더무비",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p3.png",
+            "director": "창감독",
+            "name": "계춘할망",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p4.png",
+            "director": "조성희",
+            "name": "탐정 홍길동",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p5.png",
+            "director": "존 카니",
+            "name": "싱스트리트",
+            "grade": 106,
+            "gradeNum": 12
+        }, {
+            "poster": "p6.png",
+            "director": "안소니 루소",
+            "name": "캡틴아메리카:시빌워",
+            "grade": 106,
+            "gradeNum": 12
+        }];
             
         }]);
     </script>
