@@ -1,0 +1,35 @@
+<!Document html>
+<html ng-app="directiveApp">
+
+<head>
+    <title>external directive</title>
+
+    <link rel="stylesheet" href="css/kakao.font.css" />
+    <link rel="stylesheet" href="css/angular-switcher.css" />
+    <link rel="stylesheet" href="css/angular-moment-picker.min.css" />
+
+</head>
+
+<body ng-controller="directiveCtrl"> 
+    <div moment-picker="myDate" 
+         locale="ko"> 
+        {{myDate}} 
+    </div>
+     
+    <script src="js/angular.min.js"></script>
+    <!-- https://github.com/indrimuska/angular-moment-picker-->
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/angular-moment-picker.js"></script> 
+    
+     <!-- https://github.com/720kb/angular-datepicker 좀더좋음--> 
+    
+    
+    <script>
+        var app = angular.module('directiveApp',['moment-picker']);
+        app.controller("directiveCtrl",["$scope",function($scope){ 
+            $scope.myDate = new Date();
+        }]); 
+    </script>
+</body>
+
+</html>
