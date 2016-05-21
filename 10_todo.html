@@ -1,95 +1,156 @@
 <!doctype html>
 <html ng-app="todoApp">
+
 <head>
     <meta charset="UTF-8">
     <title>할일관리프로그램</title>
-    <link rel="stylesheet" href="css/kakao.font.css"/>
-    <link rel="stylesheet" 
-          href="css/angular-switcher.css"/>
+    <link rel="stylesheet" href="css/kakao.font.css" />
+    <link rel="stylesheet" href="css/angular-switcher.css" />
     <style>
         body {
-            font:200 20px "Kakao",sans-serif;
+            font: 200 20px "Kakao", sans-serif;
         }
+
         #wrap {
-            width:800px;
-            margin:auto;
+            width: 800px;
+            margin: auto;
             box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-            padding:20px;
+            padding: 20px;
         }
-        input,button {
-            padding: 5px;
-            font:200 20px "Kakao",sans-serif;
-        }
+
+        input,
         button {
-            background:#9E9E9E;
-            border:none;
+            padding: 5px;
+            font: 200 20px "Kakao", sans-serif;
+        }
+
+        button {
+            background: #9E9E9E;
+            border: none;
             cursor: pointer;
-            padding:8px 12px;
-            color:#fff;
+            padding: 8px 12px;
+            color: #fff;
             transition: .2s ease;
         }
+
         button:hover {
             background: #424242;
             box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
 
-       
-
         ul {
-            padding:0;
+            padding: 0;
         }
+
         li {
-            color:crimson;
+            color: crimson;
             list-style: none;
         }
+
         li.end {
-            color:deepskyblue;
+            color: deepskyblue;
         }
     </style>
 </head>
-<body ng-controller="todoController">
-<div id="wrap">
-<h1>님의 할일목록</h1>
-<p>
-    전체할일 : <em>{{totalCount}}</em>개
-    / 
-    미완료 : <span>{{todoCount}}</span>개
-    <button ng-click="checkTodo()">완료된 할일제거</button>
-</p>
-<form>
-<fieldset>
-    <legend>할일입력폼</legend>
-    <input type="text" 
-           placeholder="할 일입력"/>
-    <button>입력</button>
-</fieldset>
-</form>
 
-<h2>할일목록</h2>
-<ul>
-    <switcher ng-model="labels" true-label="Done" false-label="Todo"> </switcher> <label>오늘</label>
-</ul>
-</div>
+<body ng-controller="todoController">
+    <div id="wrap">
+        <h1>{{name}}님의 할일목록</h1>
+        <p>
+            미완료 : <span>{{remaining()}}</span>개 / 전체할일 : <em>{{Lists.length}}</em>개
+            <button ng-click="removeAll(Lists)">완료된 할일제거</button>
+        </p>
+        <form>
+            <fieldset>
+                <legend>할일입력폼</legend>
+                <input type="text" placeholder="할 일입력" ng-model="todo" />
+                <button ng-click="addToDoList(todo)">입력</button>
+            </fieldset>
+        </form>
+
+        <h2>할일목록</h2>
+        <ul ng-repeat="todo in Lists">
+            <li>
+                  <switcher class="styled"
+          true-label=""
+          false-label=""
+          ng-model="todo.end">
+                 </switcher>
+            <label> {{todo.title}} </label>
+            <label> <i class="fa fa-times" aria-hidden="true" ng-click="removeTodo(Lists,$index)">x </i></label>
+            </li>
+
+        </ul>
+    </div>
     <script src="js/angular.min.js"></script>
     <script src="js/angular-switcher.js"></script>
     <script>
         var app = angular.module("todoApp", ['switcher']);
-        app.controller("todoController", ["$scope", function($scope){
+        app.controller("todoController", ["$scope", function($scope) {
+ $scope.name = "이쁜이"
+            $scope.Lists = [{
+                "end": false,
+                "title": "webrtc searching"
+            }, {
+                "end": false,
+                "title": "ionic searching"
+            }, {
+                "end": false,
+                "title": "angularJS searching"
+            }, {
+                "end": true,
+                "title": "practice searching"
+            }];
 
-            $scope.totalCount = 10;
-            $scope.todoCount = 1;
+        $scope.remaining = function() {
+            var count = 0;
+            angular.forEach($scope.Lists, function(todo) {
+//                alert(todo.Done);
+                count += todo.end ? 0 : 1;
+            });
+            return count;
+        };
 
-            $scope.checkTodo = function(){
-                alert("checkTodo");
-            }
-//
+        $scope.removeTodo = function(Lists, $index) {
+            //                alert("checkTodo : " + $index);
+            Lists.splice($index, 1);
+        }
+        $scope.removeAll = function(Lists){
+            var oldList = Lists;
+            $scope.Lists = [];
+//            angular.forEach(Lists, function(todo, $index){
+            angular.forEach(Lists, function(value, key){
+//                if(todo.end == true){
+//                    alert($index + " : " + todo.end);
+//                    Lists.splice($index,1);
+//                    }
+//                alert("key : "+ key + "value + " +value.end);
+
+                 if(!value.end) {
+                     $scope.Lists.push(value);
+                 }
+            })
+        }
+
+
+        $scope.addToDoList = function(todo) {
+//                            alert(todo);
+            if (todo != undefined) {
+                $scope.Lists.push({
+                    "end": false,
+                    "title": todo
+                });
+                $scope.todo = "";
+            } else
+                alert("please input a todo list.")
+        }
+
+        //
         }]);
     </script>
 </body>
+
 </html>
 
 <!-- j.mp/0521anis
 blazebottle@naver.com -->
-
-
-
