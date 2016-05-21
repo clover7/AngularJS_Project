@@ -20,10 +20,13 @@
     <h1>날짜 : {{day|date:"MMM, dd yyyy"}}</h1>
     <hr/>
     <h1>영화검색</h1>
+    <label> search >> </label> 
     <input type="text" id="search" ng-model="movieName"/>
-
+    
     <ul>
-        <li ng-repeat="list in lists|filter:movieName"> 
+        <!-- filter:{name:movieName} :  name만 검색
+            filter:{movieName} : 모두 검색 -->
+        <li ng-repeat="list in lists|filter:{name:movieName}"> 
             <!-- 한글은 한글자 후에 나온다. 영어는 바로 검색 가능 -->
             이름 :  {{list.name}} / 감독 : {{list.director}} 
         </li>

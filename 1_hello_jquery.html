@@ -38,7 +38,10 @@
             //alert("test");
             //2) user가 입력한 글자를 읽어온다. 
             var text = $("#txt").val();
-            $("h2").append(text); 
+            
+            //3) h2, h3에 값 txt글자로 대입.  
+            $("h2").text(text); 
+            $("h3").text(text); 
         });
     </script>
 </body>
