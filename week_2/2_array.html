@@ -8,8 +8,31 @@
 <script>
 
     var arr = ["에릭","서현진","전혜빈","예지원"];
+    var arr1 = ["에릭","서현진","전혜빈","예지원"];
+    var arr2 = ["에릭","서현진","전혜빈","예지원"];
+    var arr3 = ["에릭","서현진","전혜빈","예지원"];
 
-
+    //배열에서 지우고 싶으면 
+    //배열에 첫번째를 삭제 
+    arr.shift("오해영");
+    console.log(arr);
+    
+    //앞에추가
+    arr1.unshift("김연아");
+    console.log(arr1);
+    
+    //마지막추가
+    arr2.push("박해영");
+    console.log(arr2);
+    
+    //마지막삭제
+    arr2.pop("박해영");
+    console.log(arr2);
+    
+    //마지막삭제
+    arr3.splice(2,1);
+    console.log(arr3);
+    
 </script>
 </body>
 </html>
