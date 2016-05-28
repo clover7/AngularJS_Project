@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="ko" ng-app="animationApp">
+
 <head>
     <meta charset="UTF-8">
     <title>애니메이션예제</title>
-    <link rel="stylesheet" href="css/kakao.font.css"/>
+    <link rel="stylesheet" href="css/kakao.font.css" />
     <style>
         input {
-            font:100 20px 'Kakao',sans-serif;
+            font: 100 20px 'Kakao', sans-serif;
             padding: 10px;
         }
+        
         li {
             padding: 20px;
-            width:300px;
-            background:#fff;
+            width: 300px;
+            background: #fff;
             box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
             list-style: none;
-            font:100 30px 'Kakao',sans-serif;
-            cursor:pointer;
+            font: 100 30px 'Kakao', sans-serif;
+            cursor: pointer;
         }
-
         /*
+        css3 
          .ng-animate 클래스가 애니메이션되는 요소에
          들어오는 애니메이션 시작
          .ng-enter
@@ -31,35 +33,82 @@
          .ng-leave-active
 
         */
-
+        
         li.ng-animate {
-            transition:.6s cubic-bezier(.8,.14,.42,1.51);
+            transition: .6s cubic-bezier(.8, .14, .42, 1.51);
             backface-visibility: hidden;
+           
+            /*부드럽게 하기 위해서 사용 */
+/*               transition:.5s ease;*/
         }
+        
         li.ng-enter {
-            opacity:0.5;
-            transform:perspective(400px) rotateX(540deg) scale(.5);
-            /*
-            transform:translateX(-2000px);
-            */
+/*
+            opacity: 0.5;
+            transform: perspective(400px) rotateX(540deg) scale(.5);
+*/ 
+            transform:translateX(-2000px); 
         }
+        
         li.ng-enter-active {
             opacity: 1;
-            transform:perspective(400px) rotateX(0deg)  scale(1);
+            transform: perspective(400px) rotateX(0deg) scale(1);
             /*
             transform:translateX(0);
             */
         }
+        
         li.ng-leave {
-            transform:translateX(0) rotate(0);
+            transform: translateX(0) rotate(0);
         }
+        
         li.ng-leave-active {
-            transform:translateX(2000px) rotate(540deg);
+            transform: translateX(2000px) rotate(540deg);
         }
-
     </style>
 </head>
+
 <body ng-controller="aniCtrl">
 
+    <input ng-keypress="$event.which==13 && addText(texts,txt)" ng-model="txt"/>
+
+    <ul>
+        <li ng-repeat="getText in texts" ng-click="deleteText(texts, $index)">{{getText}}</li>
+    </ul>
+
 </body>
+
+<script src="js/angular.min.js"></script>
+<script src="js/angular-animate.min.js"></script>
+
+<script>
+    /*
+        angular animation 적용되는 상황 
+        -model add, remove (모델에 추가, 삭제)
+        -change view    (뷰가 변경될때) 
+    */
+
+    var app = angular.module("animationApp", ['ngAnimate']);
+    app.controller("aniCtrl", ["$scope", function($scope) {
+        console.log("aniCtrl");
+        
+        //객체로 해서 넣어야 한다. 
+        //dupes 체크 됨. 
+        
+        
+        $scope.texts=["ss","aa"];
+        $scope.addText = function(texts, txt){
+            console.log("addText : "+  $scope.txt);  
+            console.log("addText : "+  txt);   
+            texts.unshift(txt); 
+            $scope.txt="";
+        }
+        
+        $scope.deleteText = function(texts, $index){
+            console.log($index);
+            texts.splice($index,1);
+        }
+    }]);
+</script>
+
 </html>
