@@ -10,20 +10,20 @@
         body {
             font: 200 20px "Kakao", sans-serif;
         }
-
+        
         #wrap {
             width: 800px;
             margin: auto;
             box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
             padding: 20px;
         }
-
+        
         input,
         button {
             padding: 5px;
             font: 200 20px "Kakao", sans-serif;
         }
-
+        
         button {
             background: #9E9E9E;
             border: none;
@@ -32,23 +32,59 @@
             color: #fff;
             transition: .2s ease;
         }
-
+        
         button:hover {
             background: #424242;
             box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
-
+        
         ul {
             padding: 0;
         }
-
+        
         li {
             color: crimson;
             list-style: none;
         }
-
+        
         li.end {
             color: deepskyblue;
+        }
+        
+          li.ng-animate {
+            transition: .6s cubic-bezier(.8, .14, .42, 1.51);
+            backface-visibility: hidden;
+           
+            /*부드럽게 하기 위해서 사용 */
+               transition:.5s ease;
+        }
+        
+        li.ng-enter {
+/*
+            opacity: 0.5;
+            transform: perspective(400px) rotateX(540deg) scale(.5);
+*/ 
+/*            transform:translateX(-2000px); */
+            transform:perspective(200px) rotateX(180deg) scale(1);
+        }
+        
+        li.ng-enter-active {
+/*
+            opacity: 1;
+            transform: perspective(400px) rotateX(0deg) scale(1);
+*/
+            /*
+            transform:translateX(0);
+            */
+            transform:perspective(200px) rotateX(0deg) scale(1);
+        }
+        
+        li.ng-leave {
+            transform: translateX(0) rotate(0);
+        }
+        
+        li.ng-leave-active {
+            transform: translateX(2000px) rotate(540deg);
         }
     </style>
 </head>
@@ -60,34 +96,35 @@
             미완료 : <span>{{remaining()}}</span>개 / 전체할일 : <em>{{Lists.length}}</em>개
             <button ng-click="removeAll(Lists)">완료된 할일제거</button>
         </p>
-        <form>
+        <form ng-submit="addToDoList($event)">
+            <!-- input, button에서 엔터치는 경우, 모두 submit으로 연결되기때문에 
+                form ng-submit으로 한다. -->
             <fieldset>
                 <legend>할일입력폼</legend>
-                <input type="text" placeholder="할 일입력" ng-model="todo" />
-                <button ng-click="addToDoList(todo)">입력</button>
+                <input type="text" placeholder="할 일 입력" ng-model="todo" />
+                <!--                <button ng-click="addToDoList($event)">입력</button>-->
+                <button>입력</button>
             </fieldset>
         </form>
 
-        <h2>할일목록</h2>
-        <ul ng-repeat="todo in Lists">
-            <li>
-                  <switcher class="styled"
-          true-label=""
-          false-label=""
-          ng-model="todo.end">
-                 </switcher>
-            <label> {{todo.title}} </label>
-            <label> <i class="fa fa-times" aria-hidden="true" ng-click="removeTodo(Lists,$index)">x </i></label>
+        <h2>할일목록</h2> 
+        <ul>
+            <li ng-repeat="todo in Lists">
+                <switcher class="styled" true-label="" false-label="" ng-model="todo.end">
+                </switcher>
+                <label> {{todo.title}} </label>
+                <label> <i class="fa fa-times" aria-hidden="true" ng-click="removeTodo(Lists,$index)">x 삭제</i> </label>
             </li>
 
         </ul>
     </div>
     <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
     <script src="js/angular-switcher.js"></script>
     <script>
-        var app = angular.module("todoApp", ['switcher']);
+        var app = angular.module("todoApp", ['switcher', 'ngAnimate']);
         app.controller("todoController", ["$scope", function($scope) {
- $scope.name = "이쁜이"
+            $scope.name = "이쁜이"
             $scope.Lists = [{
                 "end": false,
                 "title": "webrtc searching"
@@ -100,52 +137,81 @@
             }, {
                 "end": true,
                 "title": "practice searching"
-            }];
-
-        $scope.remaining = function() {
-            var count = 0;
-            angular.forEach($scope.Lists, function(todo) {
-//                alert(todo.Done);
-                count += todo.end ? 0 : 1;
-            });
-            return count;
-        };
-
-        $scope.removeTodo = function(Lists, $index) {
-            //                alert("checkTodo : " + $index);
-            Lists.splice($index, 1);
-        }
-        $scope.removeAll = function(Lists){
-            var oldList = Lists;
-            $scope.Lists = [];
-//            angular.forEach(Lists, function(todo, $index){
-            angular.forEach(Lists, function(value, key){
-//                if(todo.end == true){
-//                    alert($index + " : " + todo.end);
-//                    Lists.splice($index,1);
-//                    }
-//                alert("key : "+ key + "value + " +value.end);
-
-                 if(!value.end) {
-                     $scope.Lists.push(value);
-                 }
-            })
-        }
+            }, new Todo("wiki 정리하기", false)];
 
 
-        $scope.addToDoList = function(todo) {
-//                            alert(todo);
-            if (todo != undefined) {
-                $scope.Lists.push({
-                    "end": false,
-                    "title": todo
+            //객체 지향 
+
+            //객체의 속성이름을 똑같게 하려면,, = '틀'을 만들어 놓으려면 
+            //생성자 함수를 이용.
+            //'대문자'로 만드는 것이 특징.
+            //틀을 만들어 놨기 때문에, 속성에 오타날 일이 없음. 
+            function Todo(title, end) {
+                this.title = title;
+                this.end = end | false;
+            }
+            //=====================
+            //            console.log(new Todo("zzz", true));
+            //           {"title":"zmzmzm", "end":true} 
+
+            $scope.addToDoList = function($event) {
+                    //form에 submit 후 엔터 눌렀을 경우 다른화면으로 넘어가는 경우가 있기 때문에
+                    //싱글페이지에서는 이를 막아주려 해당 이벤트 디폴트를 해준다. 
+                    $event.preventDefault();
+                    var title = $scope.todo;
+                    if (title == undefined) {
+                        alert("please input your todo.");
+                        return false;
+                    }
+
+                    //1) title을 가지고 todo 객체 생성
+                    var setTodo = new Todo(title);
+                    //2) todos 배열에 todo객체를 추가 
+                    $scope.Lists.unshift(setTodo);
+//                    $scope.Lists.push(setTodo);
+                    $scope.todo = "";
+                } 
+             
+            //남아있는 할일 카운트 getUnCompleteTodoSize 
+            $scope.remaining = function() {
+                var count = 0;
+                angular.forEach($scope.Lists, function(todo) {
+                    count += todo.end ? 0 : 1;
                 });
-                $scope.todo = "";
-            } else
-                alert("please input a todo list.")
-        }
+                return count;
+            };
 
-        //
+            //할일 삭제
+            $scope.removeTodo = function(Lists, $index) {
+                //                alert("checkTodo : " + $index);
+                Lists.splice($index, 1);
+            }
+            
+            
+            //완료된 할일 제거 
+            $scope.removeAll = function(Lists) {
+                var oldList = Lists;
+                $scope.Lists = []; 
+                angular.forEach(Lists, function(value, key) {
+                        if (!value.end) {
+                        $scope.Lists.push(value);
+                    } 
+                })
+            }
+
+            //            $scope.addToDoList = function(todo) {
+            //                //                            alert(todo);
+            //                
+            //                if (todo != undefined) {
+            //                    $scope.Lists.push({
+            //                        "end": false,
+            //                        "title": todo
+            //                    });
+            //                    $scope.todo = "";
+            //                } else
+            //                    alert("please input a todo list.")
+            //            }  
+
         }]);
     </script>
 </body>
