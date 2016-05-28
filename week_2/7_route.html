@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="routeApp">
+<head>
+<meta charset="UTF-8">
+<title>라우터 / 라우터 파라미터</title>
+<style>
+	body {
+	margin:0;}
+	#wrap {
+	width:1000px;margin:auto;border:1px solid #333;}
+	
+	#header {
+	width:1000px;
+	background:#BDBDBD;
+	border-top:1px solid #aaa;
+	}
+	
+	#header ul {
+		margin:0;
+		padding:0;
+		list-style: none;
+		overflow: hidden;
+	}
+	
+	#header li {
+		float:left;
+		padding:5px 10px;
+	}
+	#content {
+		min-height:500px;
+        position: relative;
+        overflow: hidden;
+	}
+	#footer {
+	height:100px;
+	line-height:100px;
+	text-align:center;
+        background: #BDBDBD;
+	border-top:1px solid #333}
+
+    #content li {
+        width:120px;
+        float: left;
+        text-align: center;
+        list-style: none;
+         box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        margin:5px;
+    }
+    li h3 {
+		margin: 10px;
+		text-align: center;
+		font-size: 15px;
+		overflow:hidden;
+		white-space:nowrap;
+		text-overflow:ellipsis;
+		width:100px;
+    }
+    
+</style>
+</head>
+<body>
+	<div id="wrap">
+		<div id="header">
+			<h1>멋진영화사이트</h1>
+			<ul>
+				<li><a href="#movie">영화목록</a>
+				<li><a href="#register">영화등록</a>
+				<li><a href="#mypage">마이페이지</a>
+			</ul>
+		</div>
+		<div id="content">
+		</div>
+		<div id="footer">&copy; 2016 ani.com</div>
+	</div>
+</body>
+</html>

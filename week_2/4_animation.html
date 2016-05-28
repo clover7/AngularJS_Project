@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" ng-app="animationApp">
+<head>
+    <meta charset="UTF-8">
+    <title>애니메이션예제</title>
+    <link rel="stylesheet" href="css/kakao.font.css"/>
+    <style>
+        input {
+            font:100 20px 'Kakao',sans-serif;
+            padding: 10px;
+        }
+        li {
+            padding: 20px;
+            width:300px;
+            background:#fff;
+            box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+            list-style: none;
+            font:100 30px 'Kakao',sans-serif;
+            cursor:pointer;
+        }
+
+        /*
+         .ng-animate 클래스가 애니메이션되는 요소에
+         들어오는 애니메이션 시작
+         .ng-enter
+         들어오는 애니메이션의 끝
+         .ng-enter-active
+         나가는 애니메이션의 시작
+         .ng-leave
+         나가는 애니메이션의 끝
+         .ng-leave-active
+
+        */
+
+        li.ng-animate {
+            transition:.6s cubic-bezier(.8,.14,.42,1.51);
+            backface-visibility: hidden;
+        }
+        li.ng-enter {
+            opacity:0.5;
+            transform:perspective(400px) rotateX(540deg) scale(.5);
+            /*
+            transform:translateX(-2000px);
+            */
+        }
+        li.ng-enter-active {
+            opacity: 1;
+            transform:perspective(400px) rotateX(0deg)  scale(1);
+            /*
+            transform:translateX(0);
+            */
+        }
+        li.ng-leave {
+            transform:translateX(0) rotate(0);
+        }
+        li.ng-leave-active {
+            transform:translateX(2000px) rotate(540deg);
+        }
+
+    </style>
+</head>
+<body ng-controller="aniCtrl">
+
+</body>
+</html>
