@@ -1,0 +1,32 @@
+<!Document html>
+<html ng-app="geolocationApp">
+
+<head>
+    <meta lang="UTF-8">
+    <title>geoloation</title>
+</head>
+
+<body ng-controller="geoController">
+    <h1>location: {{address}}</h1>
+</body>
+<script src="js/angular.min.js"></script>  
+<script src="geolocation.js"></script>  
+<script>
+    var app = angular.module("geolocationApp", []);
+    app.controller("geoController", ["$scope", "$http", function($scope, $http) {
+        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(onPositionUpdate);
+
+        function onPositionUpdate(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=true";
+            $http.get(url)
+                .then(function(result) {
+                    var address = result.data.results[2].formatted_address;
+                    $scope.address = address;
+                });
+        }
+    }]);
+</script>
+
+</html>

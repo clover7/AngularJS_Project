@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html ng-app="movieApp">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Movie BoxOffice</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/kakao.font.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Food List</h1>
+        </div>
+    </div>
+    <div class="main">
+        <div class="container">
+            <h4 ng-controller="geoController">현재 위치 : {{address}}</h4>
+
+            <ul ng-controller="searchController">
+                <li class="col-md-4" ng-repeat="list in lists">
+                    <div class="thumbnail">
+                        <p class="title">{{list.name}}</p>
+                        <p class="price" ng-click="movelist(movies, $index)">{{list.price|currency:undefined:0}}</p>
+                        <p class="date">{{list.day|date:"yyyy.MM.dd."}}</p>
+                        <div class="rating">
+                            <!-- font awsome : 아무리 확대해도 꺠지지 않음 -->
+                            <p class="likes" ng-click="likeCalc(movie, 'likes')"><i class="fa fa-thumbs-up"></i> {{list.likes}}</p>
+                            <p class="dislikes" ng-click="likeCalc(movie, 'dislikes')"><i class="fa fa-thumbs-down"></i>{{list.dislikes}}</p>
+                            <!-- repeat 안에 $index가 있음 -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <ul ng-controller="movieController">
+                <li class="col-md-4" ng-repeat="movie in movies">
+                    <div class="thumbnail">
+                        <img src="poster/{{movie.poster}}">
+                        <p class="title">{{movie.name}}</p>
+                        <p class="price" ng-click="movelist(movies, $index)">{{movie.price|currency:undefined:0}}</p>
+                        <p class="date">{{movie.day|date:"yyyy.MM.dd."}}</p>
+                        <div class="rating">
+                            <!-- font awsome : 아무리 확대해도 꺠지지 않음 -->
+                            <p class="likes" ng-click="likeCalc(movie, 'likes')"><i class="fa fa-thumbs-up"></i> {{movie.likes}}</p>
+                            <p class="dislikes" ng-click="likeCalc(movie, 'dislikes')"><i class="fa fa-thumbs-down"></i>{{movie.dislikes}}</p>
+
+                            <!-- repeat 안에 $index가 있음 -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <h2>&copy; 2016 ani</h2>
+        </div>
+    </div>
+
+    <script src="js/angular.min.js"></script>
+
+    <script>
+        var app = angular.module("movieApp", []);
+
+        app.controller("geoController", ["$scope", "$http", function($scope, $http) {
+            if (navigator.geolocation) navigator.geolocation.getCurrentPosition(onPositionUpdate);
+
+            function onPositionUpdate(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=true";
+                $http.get(url)
+                    .then(function(result) {
+                        var address = result.data.results[2].formatted_address;
+                        $scope.address = address;
+                    });
+            }
+        }]);
+
+        app.controller("searchController", ["$scope", "$http", function($scope, $http) {
+            $scope.xml = "";
+            $http({
+                method: 'GET',
+                url: 'https://openapi.naver.com/v1/search/local.xml?query=오금동&display=10&start=1&sort=sim',
+                headers: {
+                    'X-Naver-Client-Id': 'JR6CizkhgjfE4vIPhJBj',
+                    'X-Naver-Client-Secret': 'vhiPPfvGBa',
+                    'Content-Type': 'application/xml; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            }).success(function(data, status, headers, config) {
+                console.dir(data); // XML document object
+                $scope.xml = data.documentElement.innerHTML;
+            }).error(function(data, status, headers, config) {
+                alert(status);
+            });
+        }]);
+
+        app.controller("movieController", ["$scope", function($scope) {
+            $scope.likeCalc = function(movie, type) {
+                //            alert(type);
+                switch (type) {
+                    case 'likes':
+                        movie.likes++;
+                        break;
+                    case 'dislikes':
+                        movie.dislikes--;
+                        break;
+                }
+            }
+
+            $scope.movelist = function(moveList, $index) {
+                //            alert($index);
+                moveList[$index].price++;
+            }
+            $scope.movies = [{
+                "poster": "p1.png",
+                "director": "나홍진",
+                "name": "곡성",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 9000,
+                "day": new Date("2016-05-19")
+            }, {
+                "poster": "p2.png",
+                "director": "클레이 케이티스",
+                "name": "앵그리버드 더무비",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 9000,
+                "day": new Date("2016-05-19")
+            }, {
+                "poster": "p3.png",
+                "director": "창감독",
+                "name": "계춘할망",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 9000,
+                "day": new Date("2016-05-19")
+            }, {
+                "poster": "p4.png",
+                "director": "조성희",
+                "name": "탐정 홍길동",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 19000,
+                "day": new Date("2016-05-04")
+            }, {
+                "poster": "p5.png",
+                "director": "존 카니",
+                "name": "싱스트리트",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 10000,
+                "day": new Date("2016-05-19")
+            }, {
+                "poster": "p6.png",
+                "director": "안소니 루소",
+                "name": "캡틴아메리카:시빌워",
+                "likes": 106,
+                "dislikes": 12,
+                "price": 17000,
+                "day": new Date("2016-04-27")
+            }]; 
+        }]);
+    </script>
+</body>
+
+</html>
