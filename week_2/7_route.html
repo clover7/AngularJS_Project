@@ -69,8 +69,71 @@
 			</ul>
 		</div>
 		<div id="content">
+            <ng-view>
+                <!-- element directive ->
+                <!-- 뷰들이 ng-view 안에 바뀐다.  -->
+            </ng-view>
 		</div>
 		<div id="footer">&copy; 2016 ani.com</div>
 	</div>
+    
 </body>
+    <script src="js/angular.min.js"></script> 
+    <script src="js/angular-route.min.js"></script>
+    
+    <script> 
+        var app = angular.module("routeApp",['ngRoute']);
+        
+        //정적인 데이터를 넣을때 사용.
+        
+        app.value("movieList",[
+  {"poster":"p1.png","director":"나홍진","name":"곡성","grade":106,"gradeNum":12,"no":0},
+  {"poster":"p2.png","director":"클레이 케이티스","name":"앵그리버드 더무비","grade":106,"gradeNum":12,"no":1},
+  {"poster":"p3.png","director":"창감독","name":"계춘할망","grade":106,"gradeNum":12,"no":2},
+  {"poster":"p4.png","director":"조성희","name":"탐정 홍길동","grade":106,"gradeNum":12,"no":3},
+  {"poster":"p5.png","director":"존 카니","name":"싱스트리트","grade":106,"gradeNum":12,"no":4},
+  {"poster":"p6.png","director":"안소니 루소","name":"캡틴아메리카:시빌워","grade":106,"gradeNum":12,"no":5}
+]);
+        
+        //동적인 데이터 넣을 때 사용.
+        //config()에서 주소와 view와 controller간의 연결을 설정한다. 
+        app.config(function($routeProvider){
+//            $routeProvider를 이용하여 설정
+//            $routeProvider.when("주소", {옵션(view, controller)})
+//            주요 옵션 : 
+//            1) template(마크업을 문자열로 하는 경우)
+//            2) templateUrl(view를 주소로 입력)
+//            
+            $routeProvider.when("/register",{
+//                alert("movie");
+//                template:"<h1>여긴 /movie.</h1>"
+                templateUrl:"view/movieList.html" ,
+                controller:function($scope){
+                $scope.name = "곡성ㅁㅁ"; 
+            }
+            });
+            
+             $routeProvider.when("/movie",{ 
+                templateUrl:"view/register.html" ,
+                 controller:"movieListController"
+            });
+            
+              $routeProvider.when("/mypage",{ 
+                templateUrl:"view/myPage.html" 
+            });
+            
+             $routeProvider.when("/movie/:pageNo",{ 
+                templateUrl:"view/movieDetail.html",
+                controller:"movieDetailController"
+            });
+            
+            //기본 주소 설정 
+            $routeProvider.otherwise({"redirectTo":"/movie"});
+        })
+        
+    </script>
+    
+    <!-- app 선언한곳보다 밑에 선언.-->
+   <script src="controller/movieListController.js"></script>
+   <script src="controller/movieDetailController.js"></script>
 </html>

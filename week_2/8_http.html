@@ -1,28 +1,151 @@
 <!DOCTYPE html>
-<html >
+<html ng-app="httpApp">
+
 <head>
-<meta charset="UTF-8">
-<title>비동기통신을 위한 $http</title>
+    <meta charset="UTF-8">
+    <title>비동기통신을 위한 $http</title>
+    <!--
     <style>
-        
         li {
-            width:120px;
+            width: 120px;
             float: left;
             list-style: none;
             text-align: center;
-            
         }
-    
-        
     </style>
-            
+-->
+
+    <link rel="stylesheet" href="css/kakao.font.css" />
+    <style>
+        body {
+            font: 200 20px "Kakao", sans-serif;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        li {
+            float: left;
+            width: 100px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+        
+        h3 {
+            margin: 0;
+            text-align: center;
+            font-size: 13px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100px;
+        }
+        
+        li.ng-animate {
+            transition: .6s cubic-bezier(.8, .14, .42, 1.51);
+            backface-visibility: hidden;
+            /*부드럽게 하기 위해서 사용 */
+            transition: .5s ease;
+        }
+        
+        li.ng-enter {
+            opacity: 0.5;
+            transform: perspective(400px) rotateX(540deg) scale(.5);
+            /*            transform:translateX(-2000px); */
+        }
+        
+        li.ng-enter-active {
+            opacity: 1;
+            transform: perspective(400px) rotateX(0deg) scale(1);
+            /*
+            transform:translateX(0);
+            */
+        }
+    </style>
+
+
 </head>
-<body >
-	<button>시작</button>
-    <img src="img/loader.gif"/>
-<ul>
 
-</ul>	
+<body ng-controller="httpController">
+    <button ng-click="getMovies()">시작</button>
+    <img src="img/loader.gif" ng-hide="loader" />
 
+    <ul>
+        <li ng-repeat="movie in movies">
+            <img src="poster/{{movie.poster}}" width="100px">
+            <p>{{movie.name}}</p>
+        </li>
+
+    </ul>
+
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+
+    <script>
+        var app = angular.module("httpApp", ['ngAnimate']);
+        app.controller("httpController", ["$scope", "$http", "$timeout",
+            function($scope, $http, $timeout) {
+                console.log("httpController");
+                $scope.loader = true;
+
+                $scope.getMovies = function() {
+                    console.log("getMovies");
+                    //1. user에게 loader보여주기
+                    $scope.loader = false;
+
+                    var promise = $http({
+                        url: "json/movies.json",
+                        method: "get"
+                    });
+                    promise.error(function(data, status, header, config) {
+                        alert("error");
+                    });
+
+                    promise.success(function(data, status, header, config) {
+                        //data : 서버에서 넘어온 데이터 , 
+                        //status : http 프로토콜의 상태(200)
+                        //header : 응답프로토콜
+                        //config : 설정객체   
+                        //                        $scope.movies = data;
+                        $scope.movies = [];
+                        $scope.loader = true;
+                        var time = 0; //0.5 
+
+                        //                                                angular.forEach(data,$timeout(function(movie, index) { 
+                        //                                                    $scope.movies.push(movie);
+                        //                                                }, time));
+                        //
+                        //                                                time += 500; 
+                        //
+                        //                                                var callfunction = function(movie, index) { 
+                        //                                                    $scope.movies.push(movie);
+                        //                                                } 
+                        angular.foreach(data, $timeout(function(movie, index) {
+                                //지연된 작업이 여기에 위치한다. 
+                                $scope.movies.push(movie);
+                            }, 500); /* 1000ms 뒤에 지연된 작업이 수행된다. */
+                            //                            time += 500;
+                        )
+                    });
+                }
+
+                //jquery
+                //            $.ajax("json/movies.json",{
+                //                type:'get',
+                //                error:function(xhr, error, code){
+                //                    alert("error");
+                //                }
+                //             ,success:function(json){
+                //                alert(json);
+                //            }
+                //        }); 
+            }
+        ]);
+    </script>
 </body>
+
 </html>

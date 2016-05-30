@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="">
+<html ng-app="todoApp">
 <head>
 <meta charset="UTF-8">
 <title>할일 목록</title>
@@ -48,9 +48,38 @@ body {
 		</ul>
 	</div>
 	<div id="content">
+        <ng-view></ng-view>
 	</div>
 	<div id="footer">&copy; 2016 ani.com</div>
 </div>
+  
+    <script src="js/angular.min.js"></script> 
+    <script src="js/angular-route.min.js"></script>
+    
+    <script> 
+        var app = angular.module("todoApp",['ngRoute']);
+        
+        //뷰, 컨트롤러 연결  
+         app.config(function($routeProvider){  
+             $routeProvider.when("/todo",{ 
+                templateUrl:"view/todo.html" ,
+                 controller:"todoController"
+            });
+            
+              $routeProvider.when("/write",{ 
+                templateUrl:"view/write.html" ,
+                   controller:"writeController"
+            });
+            
+            //기본 주소 설정 
+            $routeProvider.otherwise({"redirectTo":"/todo"});
+             
+              
+        }) 
+    </script>
+    
+    <script src="controller/todoController.js"></script>
+    <script src="controller/writeController.js"></script>
 
 </body>
 </html>
