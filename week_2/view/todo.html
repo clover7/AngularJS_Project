@@ -2,9 +2,10 @@
 <ul>
     <li ng-repeat="todo in todos">
         <label>
-            <input type="checkbox" ng-model="todo.end"/> {{todo.title}}</label>
+            <input type="checkbox" ng-model="todo.end" ng-change="updateTodo(todo)"/> {{todo.title}}
+        </label>
         <button ng-click="deleteTodo(todo)"> delete</button>
     </li>
 </ul>
 
-<img src="../img/loader.gif"/>
+<img src="img/loader.gif" ng-hide="loader"/>
